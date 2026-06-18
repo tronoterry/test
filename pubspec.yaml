@@ -1,0 +1,38 @@
+name: cover_letter_app
+description: "Generates a tailored cover letter from your resume and a job description."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+  flutter: '>=3.22.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Pick PDF/DOCX files and free-form text for the resume and job description.
+  file_picker: ^11.0.2
+
+  # Extract plain text from PDF resumes (Android: PdfBox-Android, iOS: PDFKit). MIT licensed.
+  qnox_pdf_text: ^0.1.2
+
+  # Used to unzip .docx files so we can read word/document.xml ourselves.
+  archive: ^4.0.9
+
+  # Calls the Anthropic API to draft the cover letter.
+  http: ^1.6.0
+
+  # Stores the user's API key securely on-device (Android Keystore backed).
+  flutter_secure_storage: ^10.3.1
+
+  # Share the finished cover letter to other apps (email, docs, etc).
+  share_plus: ^13.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
