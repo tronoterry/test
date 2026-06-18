@@ -32,10 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _pickResume() async {
     setState(() => _errorMessage = null);
-    final file = await FilePicker.pickFile(
+    final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'docx'],
     );
+    final file = result?.files.single;
     if (file?.path == null) return;
 
     setState(() {
@@ -65,10 +66,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _pickJobDescriptionFile() async {
     setState(() => _errorMessage = null);
-    final file = await FilePicker.pickFile(
+    final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'docx', 'txt'],
     );
+    final file = result?.files.single;
     if (file?.path == null) return;
 
     setState(() => _isParsingJobDescription = true);
