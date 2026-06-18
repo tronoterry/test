@@ -27,7 +27,7 @@ dependencies:
   flutter_secure_storage: ^10.3.1
 
   # Share the finished cover letter to other apps (email, docs, etc).
-  share_plus: ^13.1.0
+  share_plus: ^12.0.2
 
 dev_dependencies:
   flutter_test:
