@@ -1,0 +1,73 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+
+    // Users can read any profile (for leaderboard display names) but only edit their own,
+    // and never grant themselves admin.
+    match /users/{uid} {
+      allow read: if isSignedIn();
+      allow create: if isOwner(uid) && request.resource.data.isAdmin == false;
+      allow update: if isOwner(uid) && request.resource.data.isAdmin == resource.data.isAdmin;
+    }
+
+    // Fixtures, odds and rounds are admin-managed; everyone can read them.
+    match /games/{gameId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /rounds/{roundId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // A user may only write their own tips, and only before the round's lock time
+    // (kickoff of the round's first game minus 1 hour). Scoring fields are server/admin-only.
+    match /tips/{tipId} {
+      // Other players' picks stay hidden until that round is scored, so nobody can
+      // just copy another player's tips before the lock.
+      allow read: if isSignedIn() &&
+        (resource.data.uid == request.auth.uid || resource.data.scored == true || isAdmin());
+
+      allow create: if isSignedIn() &&
+        request.resource.data.uid == request.auth.uid &&
+        !('correctCount' in request.resource.data) &&
+        request.time < get(/databases/$(database)/documents/rounds/$(string(request.resource.data.season) + '_' + string(request.resource.data.round))).data.lockTime;
+
+      allow update: if isAdmin() || (
+        isSignedIn() &&
+        resource.data.uid == request.auth.uid &&
+        request.resource.data.uid == request.auth.uid &&
+        request.resource.data.correctCount == resource.data.correctCount &&
+        request.time < get(/databases/$(database)/documents/rounds/$(string(request.resource.data.season) + '_' + string(request.resource.data.round))).data.lockTime
+      );
+    }
+
+    // Denormalized leaderboard rows: read-only for clients, written only by the
+    // admin-triggered finalizeRound flow (Cloud Function or admin-authenticated client).
+    match /roundResults/{id} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /seasonStandings/{id} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+  }
+}
