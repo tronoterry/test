@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="100dp"
+    android:layout_height="80dp">
+
+    <ImageView
+        android:id="@+id/cam_thumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:contentDescription="@null" />
+
+    <TextView
+        android:id="@+id/cam_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#99000000"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:padding="3dp" />
+
+</FrameLayout>

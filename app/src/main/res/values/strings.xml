@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NSW Surf Cams</string>
+    <string name="widget_title">NSW Surf Cams</string>
+    <string name="widget_empty">No cams available</string>
+    <string name="close">Close</string>
+</resources>
