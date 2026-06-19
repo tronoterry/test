@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">AdShield for Reddit</string>
+    <string name="accessibility_service_description">Detects sponsored posts in the Reddit app (marked "Ad" / "Promoted") and automatically scrolls past them.</string>
+    <string name="status_active">Accessibility service: ACTIVE</string>
+    <string name="status_inactive">Accessibility service: NOT enabled — tap below to enable</string>
+    <string name="ads_skipped_count">Ads skipped: %1$d</string>
+    <string name="enable_switch_label">Block ads</string>
+    <string name="open_settings_button">Open Accessibility Settings</string>
+    <string name="explainer">AdShield watches the Reddit app for sponsored posts labeled "Ad", "Promoted" or "Sponsored" and automatically scrolls the feed past them. It only reads on-screen text inside Reddit — nothing is collected, stored, or sent anywhere.</string>
+</resources>
