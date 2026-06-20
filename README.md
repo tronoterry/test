@@ -75,6 +75,32 @@ Output: `app/build/outputs/apk/debug/app-debug.apk`.
 5. Open the Reddit app and scroll — sponsored posts should be skipped
    automatically. The skipped-ad counter updates in the AdShield app.
 
+## No-build alternative: Termux + adb script
+
+If you don't want to build/sign an APK at all, `scripts/reddit_ad_skip.py`
+does the same job (detect an `Ad`/`Promoted`/`Sponsored` post card, swipe the
+feed past it) using `adb` directly, entirely on-device via Termux — no PC,
+no app install.
+
+1. Install **Termux** from F-Droid (the Play Store build is outdated).
+2. `pkg install android-tools python`
+3. Settings → System → Developer options → **Wireless debugging** → on, then
+   tap "Pair device with pairing code" for a pairing port + 6-digit code
+   (the main Wireless debugging screen shows a separate connect port).
+4. In Termux:
+   ```
+   adb pair localhost:<pairing_port>
+   adb connect localhost:<connect_port>
+   python scripts/reddit_ad_skip.py
+   ```
+5. Switch to Reddit and scroll. Leave Termux running in the background
+   (or in a split-screen/floating window); `Ctrl+C` stops it.
+
+This is polling-based (dump → parse → swipe, roughly once a second) so it
+reacts slower than the accessibility-service app, and the wireless-debugging
+pairing typically needs to be redone after a reboot. It trades that for
+needing zero build pipeline.
+
 ## Limitations / notes
 
 - This relies on Reddit's own `Ad` / `Promoted` / `Sponsored` text label
